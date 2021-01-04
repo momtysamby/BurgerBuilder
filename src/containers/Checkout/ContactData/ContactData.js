@@ -43,7 +43,7 @@ class ContactData extends Component{
                     value: '',
                     validation: {
                         required: true,
-                        minLength: 6,
+                        minLength: 5,
                         maxLength: 6
                     },
                     valid: false,
@@ -83,15 +83,13 @@ class ContactData extends Component{
                             {value: 'cheapest', displayValue: 'Cheapest'}
                         ]
                     },
-                    value: '',
-                    validation: {
-                        required: true
-                    },
-                    valid: false,
-                    touched: false
+                    value: 'fastest',
+                    //validation: {},
+                    valid: true
                 } 
         },
-        loading: false
+        loading: false,
+        formIsValid: false
     }
 
     orderHandler = (event) => {
@@ -118,6 +116,9 @@ class ContactData extends Component{
 
     checkValidity(value, rules) {
         let isValid = true
+        if (!rules) {
+            return true // dropdown witout rules, lecture 248
+        }
         if (rules.required) {
             isValid = value.trim() !=='' && isValid
         }
@@ -141,7 +142,11 @@ class ContactData extends Component{
         updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation)
         updatedFormElement.touched = true
         updatedOrderForm[inputIdentifier] = updatedFormElement
-        this.setState({orderForm: updatedOrderForm})
+        let formIsValid = true
+        for (let inputIdentifier in updatedOrderForm) {
+            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid
+        }
+        this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid})
     }
 
     render() {
@@ -165,7 +170,10 @@ class ContactData extends Component{
                             touched={formElemet.config.touched}
                             changed={(event) => (this.inputChangedHandler(event, formElemet.id))}/>
                     ))}
-                    <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
+                    <Button 
+                    btnType='Success' 
+                    disabled={!this.state.formIsValid}
+                    clicked={this.orderHandler}>ORDER</Button>
                 </form>
         )
         if (this.state.loading) {
