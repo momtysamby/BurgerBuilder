@@ -9,16 +9,9 @@ import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import * as actionTypes from '../../store/actions'
 
-const INGREDIENT_PRICES = {
-    salad: 0.5,
-    cheese: 0.4,
-    meat: 1.3,
-    bacon: 0.7
-}
 
 class BurgerBuilder extends Component{
     state = {
-        totalPrice: 4,
         purchasable: false,
         purchasing: false,
         loading: false,
@@ -124,7 +117,7 @@ class BurgerBuilder extends Component{
                     ingredientRemoved={this.props.onIngredientRemoved}
                     disabled={disabledInfo}
                     purchasable={this.state.purchasable}
-                    price={this.state.totalPrice}
+                    price={this.props.price}
                     ordered={this.purchaseHandler}/>
                 </React.Fragment>)
 
@@ -133,7 +126,7 @@ class BurgerBuilder extends Component{
                     ingredients={this.props.ings}
                     purchaseCancelled={this.purchaseCancelHandler}
                     purchaseContinued={this.purchaceContinueHandler}
-                    price={this.state.totalPrice}/>
+                    price={this.props.price}/>
         }
 
         if (this.state.loading) {
@@ -154,7 +147,8 @@ class BurgerBuilder extends Component{
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients
+        ings: state.ingredients,
+        price: state.totalPrice
     }
 }
 
