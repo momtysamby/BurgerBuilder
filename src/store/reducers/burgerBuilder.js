@@ -44,6 +44,7 @@ const reducer = (state = initialState, action) => {
                     bacon: action.ingredients.bacon,
                     meat: action.ingredients.meat
                 },
+                totalPrice: 4,
                 error: false
             }
 
